@@ -1,0 +1,21 @@
+$Id$
+
+Requirements:
+-------------
+This module requires drupal 4.5.x or greater.
+
+Installation:
+-------------
+1. Copy the customerror.module to the Drupal modules/ directory.
+
+2. Enable the module by visiting admin/modules
+
+3. Configure the module under admin/settings/customerror
+   Enter any title and description you want for 404 and 403.
+   Use HTML tags to format the text.
+
+4. Under admin/settings set the following, then click Save:
+   - "Default 403 (access denied) page:" to "customerror/403" (without
+     the quotes).
+   - "Default 404 (not found) page:" to "customerror/404" (without
+     the quotes).

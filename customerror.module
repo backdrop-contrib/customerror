@@ -1,0 +1,110 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Enables custom 404 (not found) and 403 (access denied) pages in Drupal
+ * with no need for creating real nodes under taxonomies
+ */
+
+function _customerror_enum_errors() {
+  // This is where the error codes and their default descriptions are
+  // stored. Add here as necessary.
+  $errors = array(
+    404 => t('requested page not found'),
+    403 => t('access denied')
+    );
+
+  return $errors;
+}
+
+function _customerror_fetch_error($error_code) {
+  $errors = _customerror_enum_errors();
+
+  $default_desc = t('unknown error: ') . $error_code;
+
+  $r = $default_desc;
+
+  foreach ($errors as $code => $desc) {
+    if ($error_code == $code) {
+      $r = $desc;
+    }
+  }
+  return $r;
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function customerror_help($section) {
+  switch ($section) {
+    case 'admin/modules#description':
+      $output = t('Enables the creation of custom error pages for 404 and 403 errors.');
+      break;
+    case 'admin/settings/customerr':
+      $output = t('Enables the creation of custom error pages for 404 and 403 errors.');
+      break;
+  }
+  return $output;
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function customerror_settings()
+{
+  $output .= t('<p>Enter the error pages that will be seen by your visitors when they get the respective errors. You can enter any HTML text. You can point the users to the FAQ, inform them that you reorganized the site, ask them to report the error, login or register, ...etc.</p>');
+
+  foreach(_customerror_enum_errors() as $error_code => $error_desc) {
+    $output .= form_textfield(t('Title for ') . $error_code,
+      'customerror_' . $error_code . '_title',
+      variable_get('customerror_' . $error_code . '_title', $error_desc), 70, 70,
+      t('Title of ' . $error_code . ' error page'));
+
+    $output .= form_textarea(t('Description for ') . $error_code, 'customerror_' . $error_code,
+      variable_get('customerror_' . $error_code, $error_desc), 70, 7,
+      t('This text will be displayed if a ' . $error_code . '('. $error_desc . ') error occurs.'));
+  }
+
+  return $output;
+}
+
+function customerror_menu($may_cache) {
+  $items = array();
+
+  if ($may_cache) {
+    $items[] = array(
+      'title'    => t('customerror'),
+      'path'     => 'customerror',
+      'access'   => TRUE,
+      'callback' => 'customerror_page',
+      'type'     => MENU_CALLBACK,
+      'weight'   => 0 );
+    }
+
+  return $items;
+}
+/**
+ * Implementation of hook_page().
+ */
+function customerror_page() {
+
+  $error = arg(1);
+
+  switch($error) {
+    case 403:
+    case 404:
+      drupal_set_title(variable_get('customerror_'. $error .'_title',
+        _customerror_fetch_error($error)));
+      $body = variable_get('customerror_' . $error, _customerror_fetch_error($error));
+      break;
+    default:
+      drupal_set_title(t('undefined error: ') . $error);
+      $body = _customerror_fetch_error($error);
+      break;
+  }
+  print theme('page', $body);
+}
+
+
+?>

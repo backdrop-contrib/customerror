@@ -1,5 +1,7 @@
 $Id$
 
+Copyright 2005 http://2bits.com
+
 Description
 -----------
 This module allows the site admin to create custom error pages for
@@ -33,7 +35,7 @@ http://drupal.org/project/customerror
 Author
 ------
 
-Khalid Baheyeldin (http://baheyeldin.com/khalid)
+Khalid Baheyeldin (http://baheyeldin.com/khalid and http://2bits.com)
 
 If you use this module, find it useful, and want to send the author
 a thank you note, then use the Feedback/Contact page at the URL above.

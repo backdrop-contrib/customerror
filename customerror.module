@@ -100,7 +100,8 @@ function customerror_page() {
     case 404:
       drupal_set_title(variable_get('customerror_'. $error .'_title',
         _customerror_fetch_error($error)));
-      $body = variable_get('customerror_' . $error, _customerror_fetch_error($error));
+      $body = theme('customerror_' . $error,
+        variable_get('customerror_' . $error, _customerror_fetch_error($error)));
       break;
     default:
       drupal_set_title(t('undefined error: ') . $error);
@@ -110,4 +111,18 @@ function customerror_page() {
   return $body;
 }
 
+/**
+ * Themeable function of the 403-Site
+ */
+function theme_customerror_403($content) {
+  return $content;
+}
+
+/**
+ * Themeable function of the 404-Site
+ */
+function theme_customerror_404($content) {
+  return $content;
+}
+ 
 ?>

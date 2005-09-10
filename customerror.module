@@ -108,7 +108,7 @@ function customerror_page() {
       $body = _customerror_fetch_error($error);
       break;
   }
-  return $body;
+  print theme('page', $body);
 }
 
 /**

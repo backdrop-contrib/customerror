@@ -125,4 +125,17 @@ function theme_customerror_404($content) {
   return $content;
 }
  
-?>
+function customerror_user($op, $edit, $user) {
+  switch($op) {
+    case 'login':
+      // Check if we have a destination saved in the session
+      $destination = $_SESSION['destination'];
+      if ($destination) {
+        // If there is one, then set the REQUEST destination to it
+        $_REQUEST['destination'] = $destination;
+        // And clear the one in the session
+        $_SESSION['destination'] = '';
+        // user.module then does a drupal_goto() for us after we return from here
+      }
+  }
+}

@@ -52,25 +52,35 @@ function customerror_help($section) {
   return $output;
 }
 
-/**
- * Implementation of hook_help().
- */
 function customerror_settings()
 {
-  $output .= t('<p>Enter the error pages that will be seen by your visitors when they get the respective errors. You can enter any HTML text. You can point the users to the FAQ, inform them that you reorganized the site, ask them to report the error, login or register, ...etc.</p>');
+  $form = array(
+    'customerror_form_description' => array(
+      '#type' => 'markup',
+      '#value' => t('<p>Enter the error pages that will be seen by your visitors when they get the respective errors. You can enter any HTML text. You can point the users to the FAQ, inform them that you reorganized the site, ask them to report the error, login or register, ...etc.</p>')
+    )
+  );
 
-  foreach(_customerror_enum_errors() as $error_code => $error_desc) {
-    $output .= form_textfield(t('Title for ') . $error_code,
-      'customerror_' . $error_code . '_title',
-      variable_get('customerror_' . $error_code . '_title', $error_desc), 70, 70,
-      t('Title of ' . $error_code . ' error page'));
-
-    $output .= form_textarea(t('Description for ') . $error_code, 'customerror_' . $error_code,
-      variable_get('customerror_' . $error_code, $error_desc), 70, 7,
-      t('This text will be displayed if a ' . $error_code . '('. $error_desc . ') error occurs.'));
+  $errors = _customerror_enum_errors();
+  foreach($errors as $error_code => $error_desc) {
+    $form['customerror_' . $error_code . '_title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title for ') . $error_code,
+      '#default_value' => variable_get('customerror_' . $error_code . '_title', $error_desc),
+      '#size' => 70,
+      '#maxlength' => 70,
+      '#description' => t('Title of ' . $error_code . ' error page')
+    );
+    $form['customerror_' . $error_code] = array(
+      '#type' => 'textarea',
+      '#title' => t('Description for ') . $error_code,
+      '#default_value' => variable_get('customerror_' . $error_code, $error_desc),
+      '#rows' => 10,
+      '#description' => t('This text will be displayed if a ' . $error_code . '('. $error_desc . ') error occurs.')
+    );
   }
 
-  return $output;
+  return $form;
 }
 
 function customerror_menu($may_cache) {

@@ -110,15 +110,15 @@ function customerror_page() {
     case 404:
       drupal_set_title(variable_get('customerror_'. $error .'_title',
         _customerror_fetch_error($error)));
-      $body = theme('customerror_' . $error,
+      $output = theme('customerror_' . $error,
         variable_get('customerror_' . $error, _customerror_fetch_error($error)));
       break;
     default:
       drupal_set_title(t('undefined error: ') . $error);
-      $body = _customerror_fetch_error($error);
+      $output = _customerror_fetch_error($error);
       break;
   }
-  print theme('page', $body);
+  return $output;
 }
 
 /**

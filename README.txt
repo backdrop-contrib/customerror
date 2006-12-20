@@ -17,6 +17,8 @@ Features
 * Handles 404 and 403 errors at present. Drupal only allows those two
   errors to be assigned custom pages. The design of this module is 
   flexible though and can accommodate future codes easily.
+* The messages can contain PHP, by using the phptemplate_customerror_403()
+  and phptemplate_customerror_404() functions in template.php.
 * Users who are not logged in and try to access an area that requires
   login will be redirected to the page they were trying to access after
   they login.

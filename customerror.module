@@ -69,7 +69,7 @@ function customerror_settings()
       '#default_value' => variable_get('customerror_' . $error_code . '_title', $error_desc),
       '#size' => 70,
       '#maxlength' => 70,
-      '#description' => t('Title of %error_code error page', array('%error_code' => $error_code . ' error page')
+      '#description' => t('Title of %error_code error page', array('%error_code' => $error_code . ' error page')),
     );
     $form['customerror_' . $error_code] = array(
       '#type' => 'textarea',
@@ -82,7 +82,7 @@ function customerror_settings()
       '#type' => 'checkbox',
       '#title' => t('Allow PHP code to be executed for %error_code', array( '%error_code' => $error_code)),
       '#default_value' => variable_get('customerror_' . $error_code . '_php', FALSE),
-      '#description' => t('This allows you to include PHP code (enclosed in &lt;php ?&gt; tags) for the %error_code (%error_desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('%error_code' => $error_code, '%error_desc' => $error_desc));
+      '#description' => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the %error_code (%error_desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('%error_code' => $error_code, '%error_desc' => $error_desc)),
     );
   }
 

@@ -52,7 +52,7 @@ function customerror_help($section) {
   return $output;
 }
 
-function customerror_settings()
+function customerror_admin_settings()
 {
   $form = array(
     'customerror_form_description' => array(
@@ -86,13 +86,22 @@ function customerror_settings()
     );
   }
 
-  return $form;
+  return system_settings_form($form);
 }
 
 function customerror_menu($may_cache) {
   $items = array();
 
   if ($may_cache) {
+    $items[] = array(
+      'path' => 'admin/settings/customerror',
+      'title' => t('Custom error'),
+      'description' => t('Administer custom error.'),
+      'callback' => 'drupal_get_form',
+      'callback arguments' => array('customerror_admin_settings'),
+      'access' => user_access('administer site configuration'),
+      'type' => MENU_NORMAL_ITEM,
+    );
     $items[] = array(
       'title'    => t('customerror'),
       'path'     => 'customerror',

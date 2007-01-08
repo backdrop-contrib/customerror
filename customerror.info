@@ -1,0 +1,5 @@
+; $Id$
+name = Custom Error
+description = Enables the creation of custom error pages for 404 and 403 errors.
+version = "$Name$"
+

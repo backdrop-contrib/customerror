@@ -65,11 +65,11 @@ function customerror_admin_settings()
   foreach($errors as $error_code => $error_desc) {
     $form['customerror_' . $error_code . '_title'] = array(
       '#type' => 'textfield',
-      '#title' => t('Title for %error_code') . $error_code,
+      '#title' => t('Title for %error_code', array('%error_code' => $error_code)),
       '#default_value' => variable_get('customerror_' . $error_code . '_title', $error_desc),
       '#size' => 70,
       '#maxlength' => 70,
-      '#description' => t('Title of %error_code error page', array('%error_code' => $error_code . ' error page')),
+      '#description' => t('Title of %error_code error page', array('%error_code' => $error_code)),
     );
     $form['customerror_' . $error_code] = array(
       '#type' => 'textarea',

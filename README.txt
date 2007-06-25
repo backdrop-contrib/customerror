@@ -10,6 +10,17 @@ This module allows the site admin to create custom error pages for
 Since the error pages are not real nodes, they do not belong a category
 term, and hence will not show up in node listings.
 
+It also allows the site admin to setup redirects for 404s. For example
+if you had a page called foo and a page called xyz, then you moved them
+to a page called bar, and abc respectively, you can setup a redirect pair
+of:
+
+  ^foo$ bar
+  ^xyz$ abc
+
+Users trying to access example.com/foo will be transparently redirected
+to example.com/bar.
+
 Features
 --------
 * Configurable page title and descriptions.

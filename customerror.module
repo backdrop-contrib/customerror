@@ -25,7 +25,7 @@ function _customerror_enum_errors() {
 function _customerror_fetch_error($error_code) {
   $errors = _customerror_enum_errors();
 
-  $default_desc = t('unknown error: %error_code', array('%error_code' => $error_code));
+  $default_desc = t('unknown error: @error_code', array('@error_code' => $error_code));
 
   $r = $default_desc;
 
@@ -65,26 +65,34 @@ function customerror_admin_settings()
   foreach($errors as $error_code => $error_desc) {
     $form['customerror_' . $error_code . '_title'] = array(
       '#type' => 'textfield',
-      '#title' => t('Title for %error_code', array('%error_code' => $error_code)),
+      '#title' => t('Title for @error_code', array('@error_code' => $error_code)),
       '#default_value' => variable_get('customerror_' . $error_code . '_title', $error_desc),
       '#size' => 70,
       '#maxlength' => 70,
-      '#description' => t('Title of %error_code error page', array('%error_code' => $error_code)),
+      '#description' => t('Title of @error_code error page', array('@error_code' => $error_code . ' error page')),
     );
     $form['customerror_' . $error_code] = array(
       '#type' => 'textarea',
       '#title' => t('Description for ') . $error_code,
       '#default_value' => variable_get('customerror_' . $error_code, $error_desc),
       '#rows' => 10,
-      '#description' => t('This text will be displayed if a %error_code (%error_desc) error occurs.', array('%error_code' => $error_code, '%error_desc' => $error_desc)),
+      '#description' => t('This text will be displayed if a @error_code (@error_desc) error occurs.', array('@error_code' => $error_code, '@error_desc' => $error_desc)),
     );
     $form['customerror_' . $error_code . '_php'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Allow PHP code to be executed for %error_code', array( '%error_code' => $error_code)),
+      '#title' => t('Allow PHP code to be executed for @error_code', array( '@error_code' => $error_code)),
       '#default_value' => variable_get('customerror_' . $error_code . '_php', FALSE),
-      '#description' => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the %error_code (%error_desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('%error_code' => $error_code, '%error_desc' => $error_desc)),
+      '#description' => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the @error_code (@error_desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('@error_code' => $error_code, '@error_desc' => $error_desc)),
     );
   }
+
+  $form['customerror_redirect'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Redirect list'),
+    '#default_value' => variable_get('customerror_redirect', ''),
+    '#rows' => 10,
+    '#description' => t('These are custom redirect pairs, one per line. Each pair is a key which is a regular expression, and a destination path for it, separated by a space.'),
+  );
 
   return system_settings_form($form);
 }
@@ -117,12 +125,12 @@ function customerror_menu($may_cache) {
  * Implementation of hook_page().
  */
 function customerror_page() {
-
   $error_code = arg(1);
 
   switch($error_code) {
     case 403:
     case 404:
+      customerror_check_redirect();
       drupal_set_title(variable_get('customerror_'. $error_code .'_title', _customerror_fetch_error($error_code)));
       $output = theme('customerror', $error_code, variable_get('customerror_' . $error_code, _customerror_fetch_error($error_code)));
       $output = (variable_get('customerror_' . $error_code . '_php', FALSE)) ? drupal_eval($output) : $output;
@@ -154,5 +162,24 @@ function customerror_user($op, $edit, $user) {
         unset($_SESSION['destination']);
         // user.module then does a drupal_goto() for us after we return from here
       }
+  }
+}
+function customerror_check_redirect() {
+  $destination = $_REQUEST['destination'];
+  if (isset($destination)) {
+    $list = explode("\n", variable_get('customerror_redirect', ''));
+    if (count($list)) {
+      foreach($list as $item) {
+        list($src, $dst) = explode(' ', $item);
+        if (isset($src) && isset($dst)) {
+          $src = str_replace("/", "\\/", $src);
+          $dst = str_replace("\r", "", $dst);
+          if (preg_match('/'. $src .'/', $destination)) {
+            $_REQUEST['destination'] = $dst;
+            drupal_goto($dst);
+          }
+        }
+      }
+    }
   }
 }

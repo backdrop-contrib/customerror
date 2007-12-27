@@ -121,6 +121,15 @@ function customerror_menu($may_cache) {
 
   return $items;
 }
+
+/**
+* Implementation of hook_simpletest().
+*/
+function customerror_simpletest() {
+  return array_keys(file_scan_directory(
+    drupal_get_path('module', 'customerror') . '/tests', '\.test$'));
+}
+
 /**
  * Implementation of hook_page().
  */

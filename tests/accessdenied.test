@@ -1,21 +1,21 @@
 <?php
-class PageNotFoundTest extends DrupalTestCase {
+class AccessDeniedTest extends DrupalTestCase {
 
   function get_info() {
     return array(
-      'name' => t('404 Page not found'),
-      'desc' => t('Check that the custom error message is displayed when a page is not found.'),
+      'name' => t('403 Access Denied'),
+      'desc' => t('Check that the custom error message is displayed when access is denied.'),
       'group' => t('CustomError'),
     );
   }
 
-  function testPageNotFoundMessage() {
+  function testAccessDeniedMessage() {
   
     /* Enable CustomError module */
     $this->drupalModuleEnable('customerror');
 
     /* Set title and text of error message */
-    $error_code = 404;
+    $error_code = 403;
     $title = $this->randomName($number = 10, $prefix = 'simpletest_');
     $this->drupalVariableSet('customerror_'. $error_code .'_title', $title);
   
@@ -29,20 +29,18 @@ class PageNotFoundTest extends DrupalTestCase {
   
     /* Point Drupal to the new error message */
     $this->drupalVariableSet('site_'. $error_code, 'customerror/'. $error_code);
-    
-    /* Log in as a user with basic privileges */
-    $user = $this->drupalCreateUserRolePerm(array('access content'));
-    $this->drupalLoginUser($user);
 
-    /* Access next node ID, shouldn't exist yet. Note that this increments the nid each time it's run. */
-    $this->get(url('node/'. db_next_id('{node}_nid'), NULL, NULL, TRUE));
+    /* Log in as a user with no privileges */
+    $user = $this->drupalCreateUserRolePerm();
+    $this->drupalLoginUser($user);
+    
+    /* Attempt to access CustomError module settings page */
+    $this->get(url('admin/settings/customerror', NULL, NULL, TRUE));
 
     /* Check for response code, title and text of error message */
     $this->assertResponse($error_code, 'Response code on '. $error_code .' error page set when accessed at non-existent URL');
     $this->assertText($title, 'Title on '. $error_code .' error page set when accessed at non-existent URL');
     $this->assertText($description, 'Description on '. $error_code .' error page set when accessed at non-existent URL');
-
-    /* Could also create node, prove it's accessible, delete it, then try to access again and prove it's gone */
     
   }
 

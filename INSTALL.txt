@@ -2,7 +2,7 @@ $Id$
 
 Requirements:
 -------------
-This module requires drupal 4.5.x or greater.
+This module requires drupal 6.x or greater.
 
 Installation:
 -------------

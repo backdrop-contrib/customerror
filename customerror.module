@@ -40,8 +40,8 @@ function _customerror_fetch_error($error_code) {
 /**
  * Implementation of hook_help().
  */
-function customerror_help($section) {
-  switch ($section) {
+function customerror_help($path, $arg) {
+  switch ($path) {
     case 'admin/modules#description':
       $output = t('Enables the creation of custom error pages for 404 and 403 errors.');
       break;
@@ -97,27 +97,23 @@ function customerror_admin_settings()
   return system_settings_form($form);
 }
 
-function customerror_menu($may_cache) {
+function customerror_menu() {
   $items = array();
 
-  if ($may_cache) {
-    $items[] = array(
-      'path' => 'admin/settings/customerror',
-      'title' => t('Custom error'),
-      'description' => t('Administer custom error.'),
-      'callback' => 'drupal_get_form',
-      'callback arguments' => array('customerror_admin_settings'),
-      'access' => user_access('administer site configuration'),
-      'type' => MENU_NORMAL_ITEM,
-    );
-    $items[] = array(
-      'title'    => t('customerror'),
-      'path'     => 'customerror',
-      'access'   => TRUE,
-      'callback' => 'customerror_page',
-      'type'     => MENU_CALLBACK,
-      'weight'   => 0 );
-    }
+  $items['admin/settings/customerror'] = array(
+    'title' => 'Custom error',
+    'description' => 'Administer custom error.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('customerror_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['customerror'] = array(
+    'title'    => 'customerror',
+    'access callback'   => TRUE,
+    'page callback' => 'customerror_page',
+    'type'     => MENU_CALLBACK,
+    'weight'   => 0 );
 
   return $items;
 }
@@ -150,6 +146,17 @@ function customerror_page() {
       break;
   }
   return $output;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function customerror_theme() {
+  return array(
+    'customerror' => array(
+      'arguments' => array('error_code', 'content')
+    ),
+  );
 }
 
 /**

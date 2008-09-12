@@ -17,7 +17,10 @@ function _customerror_enum_errors() {
   $errors = array(
     404 => t('requested page not found'),
     403 => t('access denied')
-    );
+  );
+  
+  // Sorting array here by keys so they are logically sorted on form
+  ksort($errors);
 
   return $errors;
 }
@@ -41,6 +44,7 @@ function _customerror_fetch_error($error_code) {
  * Implementation of hook_help().
  */
 function customerror_help($path, $arg) {
+  $output = '';
   switch ($path) {
     case 'admin/modules#description':
       $output = t('Enables the creation of custom error pages for 404 and 403 errors.');
@@ -63,7 +67,19 @@ function customerror_admin_settings()
 
   $errors = _customerror_enum_errors();
   foreach($errors as $error_code => $error_desc) {
-    $form['customerror_' . $error_code . '_title'] = array(
+    $form['customerror_' . $error_code . '_group'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('!error_code Error Settings', array('!error_code' => $error_code)),
+      '#collapsed' => true,
+      '#collapsible' => true,
+    );
+    $form['customerror_' . $error_code . '_group']['customerror_' . $error_code . '_enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable this custom error @error_code page', array( '@error_code' => $error_code)),
+      '#default_value' => variable_get('customerror_' . $error_code . '_enabled', TRUE),
+      '#description' => t('This will set the <em>Error Reporting</em> settings to use this custom error for @error_code errors.', array('@error_code' => $error_code)),
+    );
+    $form['customerror_' . $error_code . '_group']['customerror_' . $error_code . '_title'] = array(
       '#type' => 'textfield',
       '#title' => t('Title for @error_code', array('@error_code' => $error_code)),
       '#default_value' => variable_get('customerror_' . $error_code . '_title', $error_desc),
@@ -71,14 +87,14 @@ function customerror_admin_settings()
       '#maxlength' => 70,
       '#description' => t('Title of @error_code error page', array('@error_code' => $error_code . ' error page')),
     );
-    $form['customerror_' . $error_code] = array(
+    $form['customerror_' . $error_code . '_group']['customerror_' . $error_code] = array(
       '#type' => 'textarea',
       '#title' => t('Description for ') . $error_code,
       '#default_value' => variable_get('customerror_' . $error_code, $error_desc),
       '#rows' => 10,
       '#description' => t('This text will be displayed if a @error_code (@error_desc) error occurs.', array('@error_code' => $error_code, '@error_desc' => $error_desc)),
     );
-    $form['customerror_' . $error_code . '_php'] = array(
+    $form['customerror_' . $error_code . '_group']['customerror_' . $error_code . '_php'] = array(
       '#type' => 'checkbox',
       '#title' => t('Allow PHP code to be executed for @error_code', array( '@error_code' => $error_code)),
       '#default_value' => variable_get('customerror_' . $error_code . '_php', FALSE),
@@ -91,10 +107,23 @@ function customerror_admin_settings()
     '#title' => t('Redirect list'),
     '#default_value' => variable_get('customerror_redirect', ''),
     '#rows' => 10,
-    '#description' => t('These are custom redirect pairs, one per line. Each pair is a key which is a regular expression, and a destination path for it, separated by a space.'),
+    '#description' => t('These are custom redirect pairs, one per line. Each pair requires a path to match (which is a regular expression) and a destination separated by a space. The keyword <em>&lt;front></em> is allowed as a destination. If you are unfamilar with regular expressions, a simple search string will work, but will match any part of the URl. For example <em>index.html &lt;front></em> will match both <em>http://example.com/index.html &amp; http://example.com/archive/index.html</em>.'),
   );
 
   return system_settings_form($form);
+}
+
+function customerror_admin_settings_submit($form_id, $form) {
+  // Update Error Reporting page first
+  $error_codes = _customerror_enum_errors();
+  foreach($error_codes as $code => $err_description) {
+    if ($form['customerror_'. $code .'_enabled']) {
+      variable_set('site_' . $code, 'customerror/'. $code);
+    }
+  }
+
+  // Then rely on core to save settings
+  system_settings_form_submit($form_id, $form);
 }
 
 function customerror_menu() {
@@ -131,6 +160,7 @@ function customerror_simpletest() {
  */
 function customerror_page() {
   $error_code = arg(1);
+  $_SESSION['destination'] = $_REQUEST['destination'];
 
   switch($error_code) {
     case 403:

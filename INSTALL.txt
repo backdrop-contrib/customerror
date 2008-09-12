@@ -16,16 +16,10 @@ Installation:
    - Enter any title and description you want for the 404 (not found)
      and 403 (access denied) pages.
    - You can use any HTML tags to format the text.
+   - Ensure the Enable checkbox is checked. That sets or unsets the Error
+     Reporting settings for you.
 
-4. Enable the customerror pages.
-   Go to Administer -> Error Reporting
-   - Set "Default 403 (access denied) page:" to "customerror/403" (without
-     the quotes).
-   - Set "Default 404 (not found) page:" to "customerror/404" (without
-     the quotes).
-   - Click Save
-
-5. Test your error pages.
+4. Test your error pages.
    - Copy your present admin page url.
    - Try to go to a non-existent Drupal page on your site.
    You should see your custom error page for 404 (not found) page.

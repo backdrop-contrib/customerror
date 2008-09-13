@@ -63,40 +63,40 @@ function customerror_admin_settings() {
   );
 
   $errors = _customerror_enum_errors();
-  foreach($errors as $error_code => $error_desc) {
-    if (variable_get('site_' . $error_code, '') != 'customerror/' . $error_code) {
-      drupal_set_message(t('Error reporting is not set for error !error. Please check the settings !link.', array('!error' => $error_code, '!link' => l(t('here'), 'admin/settings/error-reporting'))), 'error');
+  foreach($errors as $code => $desc) {
+    if (variable_get('site_' . $code, '') != 'customerror/' . $code) {
+      drupal_set_message(t('Error reporting is not set for error !error. Please check the settings !link.', array('!error' => $code, '!link' => l(t('here'), 'admin/settings/error-reporting'))), 'error');
     }
   }
 
-  foreach($errors as $error_code => $error_desc) {
-    $group = 'customerror_' . $error_code . '_group';
+  foreach($errors as $code => $desc) {
+    $group = 'customerror_' . $code . '_group';
     $form[$group] = array(
       '#type'          => 'fieldset',
-      '#title'         => t('!error_code Error Settings', array('!error_code' => $error_code)),
+      '#title'         => t('!code Error Settings', array('!code' => $code)),
       '#collapsed'     => true,
       '#collapsible'   => true,
     );
-    $form[$group]['customerror_' . $error_code . '_title'] = array(
+    $form[$group]['customerror_' . $code . '_title'] = array(
       '#type'          => 'textfield',
-      '#title'         => t('Title for @error_code', array('@error_code' => $error_code)),
-      '#default_value' => variable_get('customerror_' . $error_code . '_title', $error_desc),
+      '#title'         => t('Title for @code', array('@code' => $code)),
+      '#default_value' => variable_get('customerror_' . $code . '_title', $desc),
       '#size'          => 70,
       '#maxlength'     => 70,
-      '#description'   => t('Title of @error_code error page', array('@error_code' => $error_code . ' error page')),
+      '#description'   => t('Title of @code error page', array('@code' => $code . ' error page')),
     );
-    $form[$group]['customerror_' . $error_code] = array(
+    $form[$group]['customerror_' . $code] = array(
       '#type'          => 'textarea',
-      '#title'         => t('Description for ') . $error_code,
-      '#default_value' => variable_get('customerror_' . $error_code, $error_desc),
+      '#title'         => t('Description for ') . $code,
+      '#default_value' => variable_get('customerror_' . $code, $desc),
       '#rows'          => 10,
-      '#description'   => t('This text will be displayed if a @error_code (@error_desc) error occurs.', array('@error_code' => $error_code, '@error_desc' => $error_desc)),
+      '#description'   => t('This text will be displayed if a @code (@desc) error occurs.', array('@code' => $code, '@desc' => $desc)),
     );
-    $form[$group]['customerror_' . $error_code . '_php'] = array(
+    $form[$group]['customerror_' . $code . '_php'] = array(
       '#type'          => 'checkbox',
-      '#title'         => t('Allow PHP code to be executed for @error_code', array( '@error_code' => $error_code)),
-      '#default_value' => variable_get('customerror_' . $error_code . '_php', FALSE),
-      '#description'   => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the @error_code (@error_desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('@error_code' => $error_code, '@error_desc' => $error_desc)),
+      '#title'         => t('Allow PHP code to be executed for @code', array( '@code' => $code)),
+      '#default_value' => variable_get('customerror_' . $code . '_php', FALSE),
+      '#description'   => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the @code (@desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('@code' => $code, '@desc' => $desc)),
     );
   }
 
@@ -151,20 +151,20 @@ function customerror_simpletest() {
  * Implementation of hook_page().
  */
 function customerror_page() {
-  $error_code = arg(1);
+  $code = arg(1);
   $_SESSION['destination'] = $_REQUEST['destination'];
 
-  switch($error_code) {
+  switch($code) {
     case 403:
     case 404:
       customerror_check_redirect();
-      drupal_set_title(variable_get('customerror_'. $error_code .'_title', _customerror_fetch_error($error_code)));
-      $output = theme('customerror', $error_code, variable_get('customerror_' . $error_code, _customerror_fetch_error($error_code)));
-      $output = (variable_get('customerror_' . $error_code . '_php', FALSE)) ? drupal_eval($output) : $output;
+      drupal_set_title(variable_get('customerror_'. $code .'_title', _customerror_fetch_error($code)));
+      $output = theme('customerror', $code, variable_get('customerror_' . $code, _customerror_fetch_error($code)));
+      $output = (variable_get('customerror_' . $code . '_php', FALSE)) ? drupal_eval($output) : $output;
       break;
     default:
-      drupal_set_title(t('undefined error: ') . $error_code);
-      $output = _customerror_fetch_error($error_code);
+      drupal_set_title(t('undefined error: ') . $code);
+      $output = _customerror_fetch_error($code);
       break;
   }
   return $output;
@@ -176,7 +176,7 @@ function customerror_page() {
 function customerror_theme() {
   return array(
     'customerror' => array(
-      'arguments' => array('error_code', 'content')
+      'arguments' => array('code', 'content')
     ),
   );
 }
@@ -184,7 +184,7 @@ function customerror_theme() {
 /**
  * Themeable function 
  */
-function theme_customerror($error_code, $content) {
+function theme_customerror($code, $content) {
   return $content;
 }
 

@@ -226,3 +226,16 @@ function customerror_check_redirect() {
   }
 }
 
+/**
+ * Implementation of hook_form_alter. We need this to be able to search from
+ * the error pages, otherwise the form POST's to the error page, bringing no
+ * results page.
+ */
+function customerror_form_alter($form_id, &$form) {
+  switch ($form_id) {
+    case 'search_theme_form':
+      if (arg(0) == 'customerror')
+        $form['#action'] = url('search/node');
+      break;
+  }
+}

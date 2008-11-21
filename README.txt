@@ -39,6 +39,27 @@ Features
   they login.
   (Requires a minor change to common.inc, see INSTALL.txt for details).
 
+
+Redirecting upon login
+----------------------
+Here is an example of how to add custom PHP to a 403 to give the user the
+option to login then redirect them to what they were after.
+
+<?php
+global $user;
+if ($user->uid == 0) {
+  print '<p>If your user account has access to this page, please <a href="/user?' .
+    drupal_get_destination() . '">log</a>.</p>';
+}
+?>
+
+That way when there's a 403 they get redirected back to the page they were trying to access.
+The above should be better refined to fit "best practices", such as doing this in a template.php
+rather than code stored in the database, and probably call l() or url() so it works when clean
+URL's are disabled.
+
+Thanks to: Andrew Berry (http://drupal.org/user/71291 deviantintegral).
+
 Database
 --------
 This module does not require any new database tables to be installed.

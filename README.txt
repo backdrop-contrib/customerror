@@ -37,7 +37,6 @@ Features
 * Users who are not logged in and try to access an area that requires
   login will be redirected to the page they were trying to access after
   they login.
-  (Requires a minor change to common.inc, see INSTALL.txt for details).
 
 
 Redirecting upon login
@@ -66,7 +65,6 @@ This module does not require any new database tables to be installed.
 
 Installation:
 -------------
-Please see the INSTALL.txt document for details.
 
 1. Copy the customerror.module to the Drupal modules/ directory.
 

@@ -218,7 +218,9 @@ function customerror_check_redirect() {
     if (isset($src) && isset($dst)) {
       $src = str_replace("/", "\\/", $src);
       $dst = str_replace("\r", "", $dst);
-      if (preg_match('/'. $src .'/', $destination)) {
+      // In case there are spaces in the URL, we escape them
+      $orig_dst = str_replace(" ", "%20", $destination);
+      if (preg_match('/'. $src .'/', $orig_dst)) {
         $_REQUEST['destination'] = $dst;
         drupal_goto($dst);
       }

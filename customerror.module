@@ -147,9 +147,6 @@ function customerror_simpletest() {
     drupal_get_path('module', 'customerror') . '/tests', '\.test$'));
 }
 
-/**
- * Implementation of hook_page().
- */
 function customerror_page() {
   $code = arg(1);
   $_SESSION['destination'] = $_REQUEST['destination'];
@@ -157,7 +154,12 @@ function customerror_page() {
   switch($code) {
     case 403:
     case 404:
+      // Check if we should redirect
       customerror_check_redirect();
+
+      // Make sure that we sent an appropriate header
+      customerror_header($code);
+
       drupal_set_title(variable_get('customerror_'. $code .'_title', _customerror_fetch_error($code)));
       $output = theme('customerror', $code, variable_get('customerror_' . $code, _customerror_fetch_error($code)));
       $output = (variable_get('customerror_' . $code . '_php', FALSE)) ? drupal_eval($output) : $output;
@@ -168,6 +170,17 @@ function customerror_page() {
       break;
   }
   return $output;
+}
+
+function customerror_header($code) {
+  switch($code) {
+    case 403:
+      drupal_set_header('HTTP/1.1 403 Forbidden');
+      break;
+    case 404:
+      drupal_set_header('HTTP/1.1 404 Not Found');
+      break;
+  }
 }
 
 /**

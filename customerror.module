@@ -149,10 +149,10 @@ function customerror_simpletest() {
 
 function customerror_page() {
   $code = arg(1);
-  $_SESSION['destination'] = $_REQUEST['destination'];
 
   switch($code) {
     case 403:
+      $_SESSION['destination'] = $_REQUEST['destination'];
     case 404:
       // Check if we should redirect
       customerror_check_redirect();

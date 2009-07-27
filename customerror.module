@@ -152,7 +152,7 @@ function customerror_page() {
 
   switch($code) {
     case 403:
-      $internal_path = substr(request_uri(), strlen(base_path()))) {
+      $internal_path = substr(request_uri(), strlen(base_path()));
       if ($internal_path) {
         $_REQUEST['destination'] = $internal_path;
       }

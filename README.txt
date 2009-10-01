@@ -47,15 +47,20 @@ option to login then redirect them to what they were after.
 <?php
 global $user;
 if ($user->uid == 0) {
-  print '<p>If your user account has access to this page, please <a href="/user?' .
-    drupal_get_destination() . '">log</a>.</p>';
+  $output = '<p>';
+  $output .= t('If your user account has access to this page, please !message.',
+    array('!message' =>
+      l('log in', 'user', array('destination' => drupal_get_destination())),
+    )
+  );
+  $output .= '</p>';
+  print $output;
 }
 ?>
 
 That way when there's a 403 they get redirected back to the page they were trying to access.
 The above should be better refined to fit "best practices", such as doing this in a template.php
-rather than code stored in the database, and probably call l() or url() so it works when clean
-URL's are disabled.
+rather than code stored in the database.
 
 Thanks to: Andrew Berry (http://drupal.org/user/71291 deviantintegral).
 
@@ -71,20 +76,20 @@ Installation:
 2. Go to Administer -> Build -> Modules
    - Enable the customerror module, click on Save
 
-3. Configure the module:
+3. Configure Error reporting
+   - Go to Administer -> Site configuration -> Error reporting
+   - For 403 (access denied), enter the value:
+       customerror/403
+   - For 404 (not found), enter the value:
+       customerror/404
+
+4. Configure the module:
    - Go to Administer -> Site configuration -> Custom error
    - Enter any title and description you want for the 404 (not found)
      and 403 (access denied) pages.
    - You can use any HTML tags to format the text.
    - Ensure the Enable checkbox is checked. That sets or unsets the Error
      Reporting settings for you.
-
-4. Configure Error reporting
-   - Go to Administer -> Site configuration -> Error reporting
-   - For 403 (access denied), enter the value:
-       customerror/403
-   - For 40 (not found), enter the value:
-       customerror/404
 
 5. Test your error pages.
    - Copy your present admin page url.

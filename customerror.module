@@ -161,6 +161,7 @@ function customerror_page() {
       }
       $_SESSION['destination'] = $_REQUEST['destination'];
     case 404:
+    default: // Treat an unknown method as a 404
       // Check if we should redirect
       customerror_check_redirect();
 
@@ -170,10 +171,6 @@ function customerror_page() {
       drupal_set_title(variable_get('customerror_'. $code .'_title', _customerror_fetch_error($code)));
       $output = theme('customerror', $code, variable_get('customerror_' . $code, _customerror_fetch_error($code)));
       $output = (variable_get('customerror_' . $code . '_php', FALSE)) ? drupal_eval($output) : $output;
-      break;
-    default:
-      drupal_set_title(t('undefined error: ') . $code);
-      $output = _customerror_fetch_error($code);
       break;
   }
   return $output;

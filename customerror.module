@@ -65,7 +65,7 @@ function customerror_admin_settings() {
   $errors = _customerror_enum_errors();
   foreach($errors as $code => $desc) {
     if (variable_get('site_' . $code, '') != 'customerror/' . $code) {
-      drupal_set_message(t('Error reporting is not set for error !error. Please check the settings !link.', array('!error' => $code, '!link' => l(t('here'), 'admin/settings/error-reporting'))), 'error');
+      drupal_set_message(t('Error reporting is not set for error !error. Please ensure that the default !error page is set to be customerror/!error on the !link.', array('!error' => $code, '!link' => l(t('Error reporting settings page'), 'admin/settings/error-reporting'))), 'error');
     }
   }
 

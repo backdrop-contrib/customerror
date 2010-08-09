@@ -168,6 +168,8 @@ function customerror_page() {
       // Make sure that we sent an appropriate header
       customerror_header($code);
 
+      module_invoke_all('customerror_pre_render', $code);
+
       drupal_set_title(variable_get('customerror_'. $code .'_title', _customerror_fetch_error($code)));
       $output = theme('customerror', $code, variable_get('customerror_' . $code, _customerror_fetch_error($code)));
       $output = (variable_get('customerror_' . $code . '_php', FALSE)) ? drupal_eval($output) : $output;

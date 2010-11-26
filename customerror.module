@@ -62,6 +62,13 @@ function customerror_admin_settings() {
     )
   );
 
+  $themes = system_theme_data();
+  ksort($themes);
+  $theme_options[0] = t('System default');
+  foreach ($themes as $theme) {
+    $theme_options[$theme->name] = $theme->name;
+  }
+
   $errors = _customerror_enum_errors();
   foreach($errors as $code => $desc) {
     if (variable_get('site_' . $code, '') != 'customerror/' . $code) {
@@ -91,6 +98,13 @@ function customerror_admin_settings() {
       '#default_value' => variable_get('customerror_' . $code, $desc),
       '#rows'          => 10,
       '#description'   => t('This text will be displayed if a @code (@desc) error occurs.', array('@code' => $code, '@desc' => $desc)),
+    );
+    $form[$group]['customerror_' . $code . '_theme'] = array(
+      '#type' => 'select',
+      '#options' => $theme_options,
+      '#title' => t('Theme'),
+      '#description' => t('Theme to be used on the error page.'),
+      '#default_value' => customerror_get_theme($code),
     );
     $form[$group]['customerror_' . $code . '_php'] = array(
       '#type'          => 'checkbox',
@@ -149,6 +163,13 @@ function customerror_simpletest() {
 
 function customerror_page() {
   $code = arg(1);
+
+  // set custom theme for error_page if any has been selected, 0 => default
+  $theme = customerror_get_theme($code);
+  if(!empty($theme)){
+    global $custom_theme;
+    $custom_theme = $theme;
+  }
 
   switch($code) {
     case 403:
@@ -259,4 +280,15 @@ function customerror_form_alter($form_id, &$form) {
         $form['#action'] = url('search/node');
       break;
   }
+}
+
+function customerror_get_theme($code = 404) {
+  $theme = 0;
+
+  $admin_theme = variable_get('admin_theme', 0);
+  if ($admin_theme) {
+    $theme = variable_get('customerror_' . $code . '_theme', $admin_theme);
+  }
+
+  return $theme;
 }

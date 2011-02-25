@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function customerror_uninstall() {
   db_query("DELETE FROM {variable} WHERE name LIKE 'customerror_%'");

@@ -3,5 +3,4 @@ description = Enables the creation of custom error pages for 404 and 403 errors,
 core = 7.x
 configure = admin/config/system/customerror
 
-files[] = tests/accessdenied.test
-files[] = tests/pagenotfound.test
+files[] = customerror.test

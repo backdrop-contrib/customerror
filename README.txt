@@ -1,5 +1,3 @@
-$Id: README.txt,v 1.7.2.4 2009/10/01 18:55:12 kbahey Exp $
-
 Copyright 2005 http://2bits.com
 
 Description
@@ -26,7 +24,7 @@ Features
 * Configurable page title and descriptions.
 * Any HTML formatted text can be be put in the page body.
 * Handles 404 and 403 errors at present. Drupal only allows those two
-  errors to be assigned custom pages. The design of this module is 
+  errors to be assigned custom pages. The design of this module is
   flexible though and can accommodate future codes easily.
 * The pages are themeable using the phptemplate_customerror() function
   in the template.php. The first argument is the error code (currently
@@ -73,18 +71,18 @@ Installation:
 
 1. Copy the customerror.module to the Drupal modules/ directory.
 
-2. Go to Administer -> Build -> Modules
+2. Go to the Modules page
    - Enable the customerror module, click on Save
 
 3. Configure Error reporting
-   - Go to Administer -> Site configuration -> Error reporting
+   - Go to Configuration -> System -> Site information
    - For 403 (access denied), enter the value:
        customerror/403
    - For 404 (not found), enter the value:
        customerror/404
 
 4. Configure the module:
-   - Go to Administer -> Site configuration -> Custom error
+   - Go to Configuration -> System -> Custom error
    - Enter any title and description you want for the 404 (not found)
      and 403 (access denied) pages.
    - You can use any HTML tags to format the text.

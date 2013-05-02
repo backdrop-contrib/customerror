@@ -19,6 +19,7 @@ of:
 Users trying to access example.com/foo will be transparently redirected
 to example.com/bar.
 
+
 Features
 --------
 * Configurable page title and descriptions.
@@ -62,9 +63,11 @@ rather than code stored in the database.
 
 Thanks to: Andrew Berry (http://drupal.org/user/71291 deviantintegral).
 
+
 Database
 --------
 This module does not require any new database tables to be installed.
+
 
 Installation:
 -------------
@@ -72,7 +75,7 @@ Installation:
 1. Copy the customerror.module to the Drupal modules/ directory.
 
 2. Go to the Modules page
-   - Enable the customerror module, click on Save
+   - Enable the customerror module, click on Save.
 
 3. Configure Error reporting
    - Go to Configuration -> System -> Site information
@@ -80,14 +83,14 @@ Installation:
        customerror/403
    - For 404 (not found), enter the value:
        customerror/404
+   Click on Save configuration.
 
 4. Configure the module:
    - Go to Configuration -> System -> Custom error
    - Enter any title and description you want for the 404 (not found)
      and 403 (access denied) pages.
    - You can use any HTML tags to format the text.
-   - Ensure the Enable checkbox is checked. That sets or unsets the Error
-     Reporting settings for you.
+   Click on Save configuration.
 
 5. Test your error pages.
    - Copy your present admin page url.
@@ -98,11 +101,13 @@ Installation:
    - Paste the admin page url and try to go there.
    You should see your custom error page for 403 (access denied) page.
 
+
 Bugs/Features/Patches
 ---------------------
 If you want to report bugs, feature requests, or submit a patch, please do so
 at the project page on the Drupal web site.
 http://drupal.org/project/customerror
+
 
 Author
 ------

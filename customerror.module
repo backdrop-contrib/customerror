@@ -263,10 +263,10 @@ function customerror_user_login(&$edit, $account) {
 }
 
 function customerror_check_redirect() {
-  $destination = $_GET['destination'];
-  if (empty($destination)) {
+  if (empty($_GET['destination'])) {
     return;
   }
+  $destination = $_GET['destination'];
 
   $redirect_list = variable_get('customerror_redirect', '');
   if (empty($redirect_list)) {

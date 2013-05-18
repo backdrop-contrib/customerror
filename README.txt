@@ -36,6 +36,8 @@ Features
 * Users who are not logged in and try to access an area that requires
   login will be redirected to the page they were trying to access after
   they login.
+* Return the correct HTTP status codes (403 and 404), which will
+  prevent robots from indexing the error pages.
 
 
 Redirecting upon login
@@ -75,7 +77,10 @@ Installation:
 1. Copy the customerror.module to the Drupal modules/ directory.
 
 2. Go to the Modules page
-   - Enable the customerror module, click on Save.
+   - Enable the customerror module.
+   - If you want to messages to contain PHP, enable the core
+     PHP filter module.
+   - Click on Save configuration.
 
 3. Configure Error reporting
    - Go to Configuration -> System -> Site information
@@ -102,11 +107,38 @@ Installation:
    You should see your custom error page for 403 (access denied) page.
 
 
+FAQ
+---
+
+* I want to prevent robots from indexing my custom error pages by
+  setting the robots meta tag in the HTML head to NOINDEX.
+
+  - There is no need to. CustomError returns the correct HTTP status
+    codes (403 and 404). This will prevent robots from indexing the
+    error pages.
+
+* Some 403 errors (e.g. "http://example.org/includes") are served by
+  the Apache web server and not by CustomError. Isn't that a bug?
+
+  - No. CustomError is only designed to provide a custom error page
+    when the page is processed by Drupal.  The .htaccess file that
+    comes with Drupal will catch some attempts to access forbidden
+    directories before Drupal even see the requests.  These access
+    attempts will get the default Apache 403 error document, unless
+    you use the Apache ErrorDocument directive to override this, e.g:
+      ErrorDocument 403 /error/403.html
+    For more information about this, see:
+    http://httpd.apache.org/docs/current/custom-error.html
+
+
 Bugs/Features/Patches
 ---------------------
-If you want to report bugs, feature requests, or submit a patch, please do so
-at the project page on the Drupal web site.
-http://drupal.org/project/customerror
+
+If you want to report a bug, request a feature, or submit a patch,
+please do so in the issue queue at the project page on the Drupal web
+site:
+
+   http://drupal.org/project/customerror
 
 
 Author
@@ -119,3 +151,4 @@ a thank you note, then use the Feedback/Contact page at the URL above.
 
 The author can also be contacted for paid customizations of this
 and other modules.
+

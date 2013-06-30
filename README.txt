@@ -1,27 +1,15 @@
-Copyright 2005 http://2bits.com
+CUSTOM ERROR README.txt
+=======================
 
-Description
------------
-This module allows the site admin to create custom error pages for
-404 (not found), and 403 (access denied).
+This module allows the site admin to create custom error pages for 404
+(not found), and 403 (access denied).
 
-Since the error pages are not real nodes, they do not belong a category
-term, and hence will not show up in node listings.
-
-It also allows the site admin to setup redirects for 404s. For example
-if you had a page called foo and a page called xyz, then you moved them
-to a page called bar, and abc respectively, you can setup a redirect pair
-of:
-
-  ^foo$ bar
-  ^xyz$ abc
-
-Users trying to access example.com/foo will be transparently redirected
-to example.com/bar.
-
+Since the error pages are not real nodes, they do not have a specific
+content type, and will not show up in node listings.
 
 Features
 --------
+
 * Configurable page title and descriptions.
 * Any HTML formatted text can be be put in the page body.
 * Handles 404 and 403 errors at present. Drupal only allows those two
@@ -39,9 +27,31 @@ Features
 * Return the correct HTTP status codes (403 and 404), which will
   prevent robots from indexing the error pages.
 
+It also allows the site admin to setup static redirects for 404s. For
+example if you had a page called foo and a page called xyz, then you
+moved them to a page called bar, and abc respectively, you can setup a
+redirect pair of:
+
+  ^foo$ bar
+  ^xyz$ abc
+
+The first pair will transparently redirect users trying to access
+example.com/foo to example.com/bar.  The first pair will transparently
+redirect users trying to access example.com/xyz to example.com/abc.
+
+You can have multiple pairs of redirects. Each must be on a line by
+itself.
+
+Note that the first string is a regexp, and the second string is a
+path. You have to use a single space between them.  You cannot use
+variables.  For more flexible URL rewriting, including variables, you
+may consider using an external URL rewrite engine, such as Apache
+mod_rewrite.
+
 
 Redirecting upon login
 ----------------------
+
 Here is an example of how to add custom PHP to a 403 to give the user the
 option to login then redirect them to what they were after.
 
@@ -68,13 +78,15 @@ Thanks to: Andrew Berry (http://drupal.org/user/71291 deviantintegral).
 
 Database
 --------
+
 This module does not require any new database tables to be installed.
 
 
 Installation:
 -------------
 
-1. Copy the customerror.module to the Drupal modules/ directory.
+1. Install the customerror module directory in the directory where you
+   keep contributed modules (e.g. sites/all/modules/).
 
 2. Go to the Modules page
    - Enable the customerror module.
@@ -146,9 +158,8 @@ Author
 
 Khalid Baheyeldin (http://baheyeldin.com/khalid and http://2bits.com)
 
-If you use this module, find it useful, and want to send the author
-a thank you note, then use the Feedback/Contact page at the URL above.
+If you use this module, find it useful, and want to send the author a
+thank you note, then use the Feedback/Contact page at the URL above.
 
-The author can also be contacted for paid customizations of this
-and other modules.
-
+The author can also be contacted for paid customizations of this and
+other modules.

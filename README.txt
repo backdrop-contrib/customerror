@@ -70,8 +70,8 @@ Installation:
 Redirecting upon login
 ----------------------
 
-Here is an example of how to add custom PHP to a 403 to give the user the
-option to login then redirect them to what they were after.
+Here is an example of how to add custom PHP to a 403 to give the user
+the option to login:
 
 <?php
 global $user;
@@ -79,7 +79,7 @@ if ($user->uid == 0) {
   $output = '<p>';
   $output .= t('If your user account has access to this page, please !message.',
     array('!message' =>
-      l('log in', 'user', array('destination' => drupal_get_destination())),
+      l('log in', 'user'),
     )
   );
   $output .= '</p>';
@@ -87,9 +87,8 @@ if ($user->uid == 0) {
 }
 ?>
 
-That way when there's a 403 they get redirected back to the page they were trying to access.
-The above should be better refined to fit "best practices", such as doing this in a template.php
-rather than code stored in the database.
+Note that customerror keeps track of what page the user is trying to
+access, so after logging in, the user will be redirected to that page.
 
 
 Custom redirects for 404 errors

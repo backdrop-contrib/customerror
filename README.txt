@@ -1,30 +1,25 @@
 CUSTOM ERROR README.txt
 =======================
 
-This module allows the site admin to create custom error pages for 404
-(not found), and 403 (access denied), without the need to create nodes
-for each of them.
+This module allows the site admin to create custom error pages for
+HTTP status codes 403 (access denied) and 404 (not found), without the
+need to create nodes for each of them.
 
-Features:
+Main features:
 
 * Configurable page title and descriptions.
+* There are no author and date/time headers as with normal nodes.
 * Any HTML formatted text can be be put in the page body.
-* The pages are themeable using the phptemplate_customerror() function
-  in the template.php. The first argument is the error code (currently
-  403 or 404), and the message content.
-* The messages can contain PHP, using one of two methods:
-  1. By using the phptemplate_customerror() function (see above).
-  2. By using the PHP checkbox in the settings.
+* The error pages are themeable.
 * Users who are not logged in and try to access an area that requires
   login will be redirected to the page they were trying to access after
   they login.
-* Return the correct HTTP status codes (403 and 404), which will
-  prevent robots from indexing the error pages.
+* Allows custom redirects for 404s.
 
 Since the error pages are not real nodes, they do not have a specific
 content type, and will not show up in node listings.
 
-At present, the module can be set up to handle 404 and 403
+At present, the module can be set up to handle 403 and 404
 errors. Drupal only allows those two errors to be assigned custom
 pages. However, the design of the module is flexible and can
 accommodate future error codes easily.
@@ -40,7 +35,7 @@ Installation:
    - Enable the customerror module.
    - If you want to messages to contain PHP, enable the core
      PHP filter module.
-   - Click on Save configuration.
+   Click on Save configuration.
 
 3. Configure Error reporting
    - Go to Configuration -> System -> Site information
@@ -132,7 +127,7 @@ FAQ
 	
 * I want to customize the custom error template output.
 
-  - In your sites theme, duplicate your page.tpl.php to be 
+  - In your site's theme, duplicate your page.tpl.php to be 
     page--customerror.tpl.php and then make your modifications there.
 
 * I want to have a different template for my 404 and 403 pages.
@@ -155,7 +150,6 @@ FAQ
     http://httpd.apache.org/docs/current/custom-error.html
 
 
-
 Database
 --------
 
@@ -174,6 +168,8 @@ site:
 
 Online documentation
 --------------------
+
+For more documentation, please see:
 
    https://drupal.org/node/2064843
 

@@ -279,16 +279,16 @@ function customerror_user_login(&$edit, $account) {
 }
 
 function customerror_check_redirect() {
-  if (empty($_GET['destination'])) {
+  $destination = $_GET['destination'];
+  if (empty($destination)) {
     return;
   }
-  $destination = $_GET['destination'];
 
-  $redirect_list = variable_get('customerror_redirect', '');
+  $redirect_list = explode("\n", variable_get('customerror_redirect', ''));
   if (empty($redirect_list)) {
     return;
   }
-  $redirect_list = explode("\n", $redirect_list);
+
   foreach ($redirect_list as $item) {
     list($src, $dst) = explode(' ', $item);
     if (isset($src) && isset($dst)) {

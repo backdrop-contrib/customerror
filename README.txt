@@ -73,8 +73,8 @@ global $user;
 if ($user->uid == 0) {
   $output = '<p>';
   $output .= t('If your user account has access to this page, please !message.',
-    array('!message' =>
-      l('log in', 'user'),
+    array(
+      '!message' => l(t('log in'), 'user'),
     )
   );
   $output .= '</p>';

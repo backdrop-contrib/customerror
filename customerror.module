@@ -1,28 +1,35 @@
 <?php
 
-// Copyright 2005 Khalid Baheyeldin http://2bits.com
-
-
 /**
  * @file
- * Enables custom 404 (not found) and 403 (access denied) pages in Drupal
- * with no need for creating real nodes under taxonomies
+ * Enables custom 404 (not found) and 403 (access denied) pages in Drupal.
+ *
+ * There is no need for creating real nodes under taxonomies.
+ *
+ * Copyright 2005 Khalid Baheyeldin http://2bits.com.
  */
 
+/**
+ * Helper function to set up array of error coedes.
+ *
+ * This is where the error codes and their default descriptions are
+ * stored. Add here as necessary.
+ */
 function _customerror_enum_errors() {
-  // This is where the error codes and their default descriptions are
-  // stored. Add here as necessary.
   $errors = array(
     404 => t('requested page not found'),
     403 => t('access denied'),
   );
 
-  // Sorting array here by keys so they are logically sorted on form
+  // Sorting array here by keys so they are logically sorted on form.
   ksort($errors);
 
   return $errors;
 }
 
+/**
+ * Fetch error.
+ */
 function _customerror_fetch_error($error_code) {
   $errors = _customerror_enum_errors();
 
@@ -73,7 +80,11 @@ function customerror_admin_settings($form, &$form_state) {
   $errors = _customerror_enum_errors();
   foreach ($errors as $code => $desc) {
     if (variable_get('site_' . $code, '') != 'customerror/' . $code) {
-      drupal_set_message(t('Error reporting is not set for error !error. Please ensure that the default !error page is set to be customerror/!error on the !link.', array('!error' => $code, '!link' => l(t('Site information settings page'), 'admin/config/system/site-information'))), 'error');
+      drupal_set_message(t('Error reporting is not set for error !error. Please ensure that the default !error page is set to be customerror/!error on the !link.',
+        array(
+          '!error' => $code,
+          '!link' => l(t('Site information settings page'), 'admin/config/system/site-information'),
+        )), 'error');
     }
   }
 
@@ -82,8 +93,8 @@ function customerror_admin_settings($form, &$form_state) {
     $form[$group] = array(
       '#type' => 'fieldset',
       '#title' => t('!code Error Settings', array('!code' => $code)),
-      '#collapsed' => true,
-      '#collapsible' => true,
+      '#collapsed' => TRUE,
+      '#collapsible' => TRUE,
     );
     $form[$group]['customerror_' . $code . '_title'] = array(
       '#type' => 'textfield',
@@ -91,11 +102,11 @@ function customerror_admin_settings($form, &$form_state) {
       '#default_value' => variable_get('customerror_' . $code . '_title', $desc),
       '#size' => 70,
       '#maxlength' => 70,
-      '#description' => t('Title of @code error page', array('@code' => $code . ' error page')),
+      '#description' => t('Title of @code error page', array('@code' => $code)),
     );
     $form[$group]['customerror_' . $code] = array(
       '#type' => 'textarea',
-      '#title' => t('Description for ') . $code,
+      '#title' => t('Description for @code', array('@code' => $code)),
       '#default_value' => variable_get('customerror_' . $code, $desc),
       '#rows' => 10,
       '#description' => t('This text will be displayed if a @code (@desc) error occurs.', array('@code' => $code, '@desc' => $desc)),
@@ -163,7 +174,7 @@ function customerror_menu() {
 function customerror_page() {
   $code = arg(1);
 
-  // set custom theme for error_page if any has been selected, 0 => default
+  // Set custom theme for error_page if any has been selected, 0 => default.
   $theme = customerror_get_theme($code);
   if (!empty($theme)) {
     global $custom_theme;
@@ -187,11 +198,12 @@ function customerror_page() {
       }
       $_SESSION['destination'] = $_GET['destination'];
     case 404:
-    default: // Treat an unknown method as a 404
-      // Check if we should redirect
+    default:
+      // Treat an unknown method as a 404.
+      // Check if we should redirect.
       customerror_check_redirect();
 
-      // Make sure that we sent an appropriate header
+      // Make sure that we sent an appropriate header.
       customerror_header($code);
 
       module_invoke_all('customerror_pre_render', $code);
@@ -213,7 +225,7 @@ function customerror_page() {
 /**
  * Sets the http header depending on the error code (403 or 404).
  *
- * @param integer $code
+ * @param int $code
  *   The error code, either 403 or 404.
  */
 function customerror_header($code) {
@@ -221,6 +233,7 @@ function customerror_header($code) {
     case 403:
       drupal_add_http_header('Status', '403 Forbidden');
       break;
+
     case 404:
       drupal_add_http_header('Status', '404 Not Found');
       break;
@@ -241,15 +254,14 @@ function customerror_theme() {
 /**
  * Returns HTML for a customized error message.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
- *   - code: HTTP responce status.
+ *   - code: HTTP response status.
  *   - content: markup message.
  *
  * @ingroup themeable
  */
-function theme_customerror($variables) {
-  $code = $variables['code'];
+function theme_customerror(array $variables) {
   $content = $variables['content'];
   return $content;
 }
@@ -258,9 +270,9 @@ function theme_customerror($variables) {
  * Implements hook_user_login().
  */
 function customerror_user_login(&$edit, $account) {
-  // Check if we have a destination saved in the session
+  // Check if we have a destination saved in the session.
   if (!empty($_SESSION['destination'])) {
-    // If there is one, then set the REQUEST destination to it
+    // If there is one, then set the REQUEST destination to it.
     $dest = drupal_parse_url($_SESSION['destination']);
     if (isset($dest['query']['destination'])) {
       $dnode = $dest['query']['destination'];
@@ -272,12 +284,15 @@ function customerror_user_login(&$edit, $account) {
       $dnode = variable_get('site_frontpage', 'node');
     }
     $_GET['destination'] = $dnode;
-    // And clear the one in the session
+    // And clear the one in the session.
     unset($_SESSION['destination']);
-    // user.module then does a drupal_goto() for us after we return from here
+    // User module then does a drupal_goto() after we return from here.
   }
 }
 
+/**
+ * Check list of redirects.
+ */
 function customerror_check_redirect() {
   $destination = $_GET['destination'];
   if (empty($destination)) {
@@ -294,7 +309,7 @@ function customerror_check_redirect() {
     if (isset($src) && isset($dst)) {
       $src = str_replace("/", "\\/", $src);
       $dst = str_replace("\r", "", $dst);
-      // In case there are spaces in the URL, we escape them
+      // In case there are spaces in the URL, we escape them.
       $orig_dst = str_replace(" ", "%20", $destination);
       if (preg_match('/' . $src . '/', $orig_dst)) {
         $_GET['destination'] = $dst;

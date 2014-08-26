@@ -303,16 +303,28 @@ function customerror_check_redirect() {
   if (empty($destination)) {
     return;
   }
-  $redirects = variable_get('customerror_redirect', '');
+  $redirects = trim(variable_get('customerror_redirect', ''));
   if (empty($redirects)) {
     return;
   }
   $redirect_list = explode("\n", $redirects);
   foreach ($redirect_list as $item) {
-    list($src, $dst) = explode(' ', $item);
-    if (isset($src) && isset($dst)) {
+    $pair = explode(' ', $item);
+    $src = trim($pair[0]);
+    if (isset($pair[1])) {
+      $dst = trim($pair[1]);
+    }
+    else {
+      $dst = NULL;
+    }
+    if (empty($src) || empty($dst)) {
+      $item = trim($item);
+      // Replace sp with nbsp.
+      $item = str_replace(' ', ' ', $item);
+      drupal_set_message(t('Malformet redirect <code>"@item"</code> in custom error 404 redirect list.', array('@item' => $item)),'error');
+    }
+    else {
       $src = str_replace("/", "\\/", $src);
-      $dst = str_replace("\r", "", $dst);
       // In case there are spaces in the URL, we escape them.
       $orig_dst = str_replace(" ", "%20", $destination);
       if (preg_match('/' . $src . '/', $orig_dst)) {

@@ -213,6 +213,10 @@ function customerror_page() {
 
       module_invoke_all('customerror_pre_render', $code);
 
+      if (module_exists('customerroralt') && customerroralt_code($code)) {
+        $code = customerroralt_code($code);
+      }
+
       drupal_set_title(variable_get('customerror_' . $code . '_title', _customerror_fetch_error($code)));
       $output = theme('customerror', array(
         'code' => $code,

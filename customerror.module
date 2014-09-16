@@ -190,6 +190,11 @@ function customerror_page() {
     case 403:
       $internal_path = substr(request_uri(), strlen(base_path()));
       if ($internal_path) {
+        // Lets determine if we have a prefix from our languages.
+        if (module_exists('locale') && function_exists('language_url_split_prefix')) {
+          // Turn the path into a string so we can then remove our prefix.
+          list($language, $internal_path) = language_url_split_prefix($internal_path, language_list());
+        }
         $dest = drupal_parse_url($internal_path);
         if (isset($dest['query']['destination'])) {
           $_GET['destination'] = ($dest['query']['destination']);

@@ -17,6 +17,7 @@ function customerroralt_help($path, $arg) {
   }
   return $output;
 }
+
 /**
  * Implements hook_form_FORM_ID_alter() for customerror_admin_settings.
  *
@@ -39,6 +40,7 @@ function customerroralt_form_customerror_admin_settings_alter(&$form, &$form_sta
       '#title' => t('403 for !role Error Settings', array('!role' => $role)),
       '#collapsed' => TRUE,
       '#collapsible' => TRUE,
+      '#weight' => -14,
     );
     $form[$group]['customerror_403_' . $role . '_title'] = array(
       '#type' => 'textfield',

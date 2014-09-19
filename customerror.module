@@ -52,7 +52,6 @@ function customerror_help($path, $arg) {
   $output = '';
   switch ($path) {
     case 'admin/help#customerror':
-    case 'admin/config/system/customerror':
       $output = t('Enables the creation of custom error pages for 404 and 403 errors.');
       break;
   }
@@ -107,12 +106,6 @@ function customerror_admin_settings($form, &$form_state) {
       '#default_value' => variable_get('customerror_' . $code, $desc),
       '#rows' => 10,
       '#description' => t('This text will be displayed if a @code (@desc) error occurs.', array('@code' => $code, '@desc' => $desc)),
-    );
-    $form[$group]['customerror_' . $code . '_php'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Allow PHP code to be executed for @code.', array('@code' => $code)),
-      '#default_value' => variable_get('customerror_' . $code . '_php', FALSE),
-      '#description' => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the @code (@desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('@code' => $code, '@desc' => $desc)),
     );
   }
 
@@ -232,8 +225,7 @@ function customerror_page() {
         'content' => variable_get('customerror_' . $code, _customerror_fetch_error($code)),
       ));
       if (module_exists('php')) {
-        $output = (variable_get('customerror_' . $code . '_php', FALSE)) ? php_eval($output) : $output;
-
+        $output = php_eval($output);
       }
       break;
   }

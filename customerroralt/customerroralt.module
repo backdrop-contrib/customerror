@@ -12,7 +12,7 @@ function customerroralt_help($path, $arg) {
   $output = '';
   switch ($path) {
     case 'admin/help#customerroralt':
-      $output = t('Enables the creation of "you do not have adequate permissions to see this page" for authenticated users, as distinct from "you must log in" for anonymous.');
+      $output = t('Enables the creation of an "insufficient permissions" page for authenticated users, as distinct from "please log in" for anonymous users.');
       break;
   }
   return $output;
@@ -57,21 +57,18 @@ function customerroralt_form_customerror_admin_settings_alter(&$form, &$form_sta
       '#rows' => 10,
       '#description' => t('This text will be displayed if a 403 error occurs for a @role (@desc).', array('@role' => $role, '@desc' => $desc)),
     );
-    $form[$group]['customerror_403_' . $role . '_php'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Allow PHP code to be executed for 403 for @role.', array('@role' => $role)),
-      '#default_value' => variable_get('customerror_' . $role . '_php', FALSE),
-      '#description' => t('This allows you to include PHP code (enclosed in &lt;?php ?&gt; tags) for the @code (@desc) message. Note that this can be dangerous in some situations. Make sure that you are aware of the implications.', array('@role' => $role, '@desc' => $desc)),
-    );
   }
 }
 
 /**
- * Return a 'code' to replace the one used by customerror in the last steps.
+ * Returm replacement code.
+ *
+ * If 403, and user is logged in, return a 'code' to replace the one
+ * used by customerror in the last steps.
  */
 function customerroralt_code($code) {
-  if ($GLOBALS['user']->uid) {
-    return '403_authenticated';
+  if (user_is_logged_in() && 403 == $code) {
+    return $code . '_authenticated';
   }
-  return NULL;
+  return $code;
 }

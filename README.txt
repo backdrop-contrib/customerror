@@ -10,6 +10,7 @@ CONTENTS OF THIS FILE
 * Configuration
   - Redirecting upon login
   - Custom redirects for 404 errors
+* Submodule
 * FAQ
 * Maintainers
 
@@ -146,6 +147,20 @@ you may consider the Drupal Redirect module, or using an external URL
 rewrite engine, such as Apache mod_rewrite.  If you use some other
 means of redirection or rewriting, you should refrain from using the
 redirect feature of CustomError.
+
+
+SUBMODULE
+---------
+
+Packaged with the project is the submodule: Custom error alternate for
+authenticated.
+
+Enabling this sub-module will add fields that allow the administrator
+to add a title and description for 403 (access denied) for
+authenticated users that are different from status code 403 (access
+denied) for anonymous users.
+
+See the submodule's own README.md for more documentation.
 
 
 FAQ

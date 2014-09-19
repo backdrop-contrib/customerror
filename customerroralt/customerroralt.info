@@ -1,0 +1,6 @@
+name = Custom error alternate for authenticated
+description = "Enables the creation of 'you do not have adequate permissions to see this page' for authenticated users, as distinct from 'you must log in' for anonymous.<br />
+  <small>Machine name: customerroralt</small>"
+core = 7.x
+configure = admin/config/system/customerror
+dependencies[] = customerror

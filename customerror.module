@@ -194,7 +194,7 @@ function customerror_page() {
         }
         $dest = drupal_parse_url($internal_path);
         if (isset($dest['query']['destination'])) {
-          $_GET['destination'] = ($dest['query']['destination']);
+          $_GET['destination'] = $dest['query']['destination'];
         }
         else {
           $_GET['destination'] = $internal_path;
@@ -203,7 +203,10 @@ function customerror_page() {
       else {
         $_GET['destination'] = variable_get('site_frontpage', 'node');
       }
-      $_SESSION['destination'] = $_GET['destination'];
+      // If the user is not logged in, save destination to redirect if they do.
+      if (!$GLOBALS['user']->uid) {
+        $_SESSION['customerror_destination'] = $_GET['destination'];
+      }
     case 404:
     default:
       // Treat an unknown method as a 404.
@@ -277,27 +280,23 @@ function theme_customerror(array $variables) {
 }
 
 /**
- * Implements hook_user_login().
+ * Implements hook_drupal_goto_alter().
  */
-function customerror_user_login(&$edit, $account) {
-  // Check if we have a destination saved in the session.
-  if (!empty($_SESSION['destination'])) {
-    // If there is one, then set the REQUEST destination to it.
-    $dest = drupal_parse_url($_SESSION['destination']);
-    if (isset($dest['query']['destination'])) {
-      $dnode = $dest['query']['destination'];
-    }
-    elseif (isset($dest['path'])) {
-      $dnode = $dest['path'];
-    }
-    else {
-      $dnode = variable_get('site_frontpage', 'node');
-    }
-    $_GET['destination'] = $dnode;
-    // And clear the one in the session.
-    unset($_SESSION['destination']);
-    // User module then does a drupal_goto() after we return from here.
+function customerror_drupal_goto_alter(&$path, &$options, &$http_response_code) {
+  if (!isset($_SESSION['customerror_destination'])) {
+    return;
   }
+  $dest = drupal_parse_url($_SESSION['customerror_destination']);
+  // If the password reset token is set: user needs a chance to change password.
+  if (isset($options['query']['pass-reset-token'])) {
+    $options['query']['destination'] = $dest['path'];
+  }
+  else {
+    $path = $dest['path'];
+    unset($dest['path']);
+    $options += $dest;
+  }
+  unset($_SESSION['customerror_destination']);
 }
 
 /**

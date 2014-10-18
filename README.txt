@@ -74,11 +74,11 @@ INSTALLATION
    - Go to Configuration -> System -> Custom error
    - Enter any title and description you want for the 404 (not found)
      and 403 (access denied) pages.
-   - The Set theme to be used on the error pages. The first option
-     (System default) lets the system set the theme. Each of the
-     remaining options lets you set an explicit theme to be used on
-     error pages (but it will not override the administration theme,
-     if set).
+   - You may also set theme to be used on the error pages. The first
+     option (System default) lets the system set the theme. Each of
+     the remaining options lets you set an explicit theme to be used
+     on error pages (but it will not override the administration
+     theme, if set).
    - You can use any HTML tags to format the text.
    Click on Save configuration.
 

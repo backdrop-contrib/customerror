@@ -362,11 +362,11 @@ function customerror_form_search_theme_form_alter(&$form, &$form_state, $form_id
  */
 
 function customerror_custom_theme() {
- if (drupal_valid_path(current_path())) {
-    return;
-  }
   $theme = variable_get('customerror_theme', 0);
   if (!$theme) {
+    return;
+  }
+ if (drupal_valid_path(current_path())) {
     return;
   }
   return $theme;

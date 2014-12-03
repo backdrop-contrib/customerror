@@ -164,10 +164,11 @@ function customerror_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
 
-  $items['customerror'] = array(
+  $items['customerror/%'] = array(
     'title' => 'customerror',
     'access callback' => TRUE,
     'page callback' => 'customerror_page',
+    'page arguments' => array(1),
     'theme callback' => 'customerror_theme_callback',
     'type' => MENU_CALLBACK,
   );
@@ -177,12 +178,8 @@ function customerror_menu() {
 
 /**
  * Returns the content to display on the the 403 or 404 error page.
- *
- * Does not seem to do any themeing.
  */
-function customerror_page() {
-  $code = arg(1);
-
+function customerror_page($code) {
   switch ($code) {
     case 403:
       $internal_path = substr(request_uri(), strlen(base_path()));
@@ -372,3 +369,19 @@ function customerror_custom_theme() {
   return $theme;
 }
 
+/*
+* Theme function for LoginToboggan's 'lt_access_denied'.
+*/
+function _customerror__theme_lt_access_denied() {
+  return customerror_page(403);
+}
+
+/**
+* Implements hook_theme_registry_alter()
+*/
+function customerror_theme_registry_alter(&$theme_registry) {
+  if (module_exists('logintoboggan')) {
+    $theme_registry['lt_access_denied']['theme path'] = drupal_get_path('module', 'customerror');
+    $theme_registry['lt_access_denied']['function'] = '_customerror__theme_lt_access_denied';
+  }
+}

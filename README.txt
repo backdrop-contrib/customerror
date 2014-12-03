@@ -55,11 +55,11 @@ This module does not require any new database tables to be installed.
 INSTALLATION
 ------------
 
-1. Install the customerror module directory in the directory where you
+1. Install the CustomError module directory in the directory where you
    keep contributed modules (e.g. sites/all/modules/).
 
 2. Go to the Modules page
-   - Enable the customerror module.
+   - Enable the CustomError module.
    Click on Save configuration.
 
 3. Configure Error reporting
@@ -163,7 +163,7 @@ in users, enable the submodule that is part of the project: Custom
 error alternate for authenticated.
 
 If your handling of access denied errors allows the user to log in
-after been shown the message, customerror keeps track of what page the
+after been shown the message, CustomError keeps track of what page the
 user is trying to access. After succesfully logging in, the user will
 be redirected to the page he or she originally requested.
 
@@ -182,6 +182,15 @@ denied) for anonymous users.
 
 See the submodule's own README.md for more documentation.
 
+
+AWARENESS OF OTHER MODULES
+--------------------------
+
+* LoginToboggan[1]:
+  When this module is enabled, CustoMerror will override
+  LoginToboggan's theme function for access denied pages so that you
+  can use CustomError and Custom error alternate for authenticated
+  to handle the error.
 
 FAQ
 ---
@@ -222,8 +231,11 @@ Principal author is Khalid Baheyeldin
 (http://baheyeldin.com/khalid and http://2bits.com).
 
 Port to Drupal 7 port has been overseen by Gisle Hannemyr
-(https://drupal.org/user/409554).
+(https://www.drupal.org/u/gisle).
 
 The authors can be contacted for paid customizations of this module
 as well as Drupal consulting, installation, development, and
 customizations.
+
+
+[1]: https://www.drupal.org/project/logintoboggan

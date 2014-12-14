@@ -300,7 +300,9 @@ function customerror_drupal_goto_alter(&$path, &$options, &$http_response_code) 
  * Check list of redirects.
  */
 function customerror_check_redirect() {
-  $destination = $_GET['destination'];
+  if (isset($_GET['destination'])) {
+    $destination = $_GET['destination'];
+  }
   if (empty($destination)) {
     return;
   }

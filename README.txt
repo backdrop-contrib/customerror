@@ -11,6 +11,7 @@ CONTENTS OF THIS FILE
   - Redirecting upon login
   - Custom redirects for 404 errors
 * Submodule
+* Integration with other modules
 * FAQ
 * Maintainers
 
@@ -159,8 +160,8 @@ print $output;
 Note that enabling the PHP filter module is depreciated (it will no
 longer be part of core for Drupal 8).  For a safer method to show
 different error pages for access denied pages for anonymous and logged
-in users, enable the submodule that is part of the project: Custom
-error alternate for authenticated.
+in users, enable the submodule that is part of the project:
+CustomError alternate for authenticated.
 
 If your handling of access denied errors allows the user to log in
 after been shown the message, CustomError keeps track of what page the
@@ -168,11 +169,10 @@ user is trying to access. After succesfully logging in, the user will
 be redirected to the page he or she originally requested.
 
 
-
 SUBMODULE
 ---------
 
-Packaged with the project is the submodule: Custom error alternate for
+Packaged with the project is the submodule: CustomError alternate for
 authenticated.
 
 Enabling this sub-module will add fields that allow the administrator
@@ -183,14 +183,19 @@ denied) for anonymous users.
 See the submodule's own README.md for more documentation.
 
 
-AWARENESS OF OTHER MODULES
---------------------------
+INTEGRATION WITH OTHER MODULES
+------------------------------
+
+The function customerror_page() can be called by other modules to have
+CustomError or CustomError alternate for authenticated handle the
+error.
 
 * LoginToboggan[1]:
-  When this module is enabled, CustoMerror will override
+  When this module is enabled, CustomError will override
   LoginToboggan's theme function for access denied pages so that you
-  can use CustomError and Custom error alternate for authenticated
+  can use CustomError and CustomError alternate for authenticated
   to handle the error.
+
 
 FAQ
 ---
@@ -213,7 +218,6 @@ A: Duplicate your page.tpl.php page to be
 
 Q: Some 403 errors (e.g. "http://example.org/includes") are served by
    the Apache web server and not by CustomError. Isn't that a bug?
-
 A: No. CustomError is only designed to provide a custom error page
    when the page is processed by Drupal.  The .htaccess file that
    comes with Drupal will catch some attempts to access forbidden

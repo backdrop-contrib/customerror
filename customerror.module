@@ -280,7 +280,7 @@ function theme_customerror(array $variables) {
  * Implements hook_drupal_goto_alter().
  */
 function customerror_drupal_goto_alter(&$path, &$options, &$http_response_code) {
-  if (!isset($_SESSION['customerror_destination'])) {
+  if (!user_is_logged_in() || !isset($_SESSION['customerror_destination'])) {
     return;
   }
   $dest = drupal_parse_url($_SESSION['customerror_destination']);

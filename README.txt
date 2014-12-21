@@ -191,10 +191,28 @@ CustomError or CustomError alternate for authenticated handle the
 error.
 
 * LoginToboggan[1]:
-  When this module is enabled, CustomError will override
-  LoginToboggan's theme function for access denied pages so that you
-  can use CustomError and CustomError alternate for authenticated
-  to handle the error.
+  If this module is enabled, in can enhance CustomError's handling of
+  access-denied messages, but you have to be careful to set them up to
+  work together correctly.
+
+  These two modules both attempt to take over handling of system 403
+  ("access denied") messages, and can conflict. CustomError does it by
+  asking you to go to "admin/config/system/site-information" and
+  manually setting the "Default 403 (access denied) page" to
+  "customerror/403", whereas LoginToboggan sets that same field to
+  "toboggan/denied" automatically (overwriting any other value that
+  was there), when you enable its "Present login form on access denied
+  (403)".
+
+  If you are using CustomError with LoginToboggan, you should allow
+  LoginToboggan to perform this take-over (in other words, don't set
+  the "Default 403 (access denied) page" to "customerror/403"). This
+  way, if someone attempts to access a page that they don't have
+  access to, LoginToboggan will first give them a chance to log in if
+  they haven't yet. If they still don't have access to the page,
+  CustomError then takes over from LoginToboggan (by overriding one of
+  its theme functions), displaying its customisable messages for
+  access-denied errors.
 
 
 FAQ

@@ -161,7 +161,8 @@ function customerror_menu() {
   );
 
   $items['customerror/%'] = array(
-    'title' => 'customerror',
+    'title callback' => 'customerror_page_title',
+    'title arguments' => array(1),
     'access callback' => TRUE,
     'page callback' => 'customerror_page',
     'page arguments' => array(1),
@@ -170,6 +171,19 @@ function customerror_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Return the page title associated to the customerror code.
+ */
+function customerror_page_title($code) {
+  module_invoke_all('customerror_pre_render', $code);
+
+  if (module_exists('customerroralt') && customerroralt_code($code)) {
+    $code = customerroralt_code($code);
+  }
+  $desc = _customerror_fetch_error($code);
+  return variable_get('customerror_' . $code . '_title', $desc[0]);
 }
 
 /**
@@ -216,7 +230,7 @@ function customerror_page($code) {
       }
 
       $desc = _customerror_fetch_error($code);
-      drupal_set_title(variable_get('customerror_' . $code . '_title', $desc[0]));
+      //drupal_set_title(variable_get('customerror_' . $code . '_title', $desc[0]));
       $output = theme('customerror', array(
         'code' => $code,
         'content' => variable_get('customerror_' . $code, $desc[1]),

@@ -17,8 +17,8 @@
  */
 function _customerror_enum_errors() {
   $errors = array(
-    404 => t('requested page not found'),
-    403 => t('access denied'),
+    404 => array(t('Page not found'), t('The requested page could not be found.')),
+    403 => array(t('Access denied'), t('You are not authorized to access this page.')),
   );
 
   // Sorting array here by keys so they are logically sorted on form.
@@ -32,17 +32,13 @@ function _customerror_enum_errors() {
  */
 function _customerror_fetch_error($error_code) {
   $errors = _customerror_enum_errors();
-
-  $default_desc = t('unknown error: @error_code', array('@error_code' => $error_code));
-
-  $r = $default_desc;
-
-  foreach ($errors as $code => $desc) {
-    if ($error_code == $code) {
-      $r = $desc;
-    }
-  }
-  return $r;
+  $ret = isset($errors[$error_code]) ?
+    $errors[$error_code] :
+    array(
+      t('unknown error: @error_code', array('@error_code' => $error_code)),
+      t('This error has no description.'),
+    );
+  return $ret;
 }
 
 /**
@@ -95,7 +91,7 @@ function customerror_admin_settings($form, &$form_state) {
     $form[$group]['customerror_' . $code . '_title'] = array(
       '#type' => 'textfield',
       '#title' => t('Title for @code', array('@code' => $code)),
-      '#default_value' => variable_get('customerror_' . $code . '_title', $desc),
+      '#default_value' => variable_get('customerror_' . $code . '_title', $desc[0]),
       '#size' => 70,
       '#maxlength' => 70,
       '#description' => t('Title of @code error page', array('@code' => $code)),
@@ -103,9 +99,9 @@ function customerror_admin_settings($form, &$form_state) {
     $form[$group]['customerror_' . $code] = array(
       '#type' => 'textarea',
       '#title' => t('Description for @code', array('@code' => $code)),
-      '#default_value' => variable_get('customerror_' . $code, $desc),
+      '#default_value' => variable_get('customerror_' . $code, $desc[1]),
       '#rows' => 10,
-      '#description' => t('This text will be displayed if a @code (@desc) error occurs.', array('@code' => $code, '@desc' => $desc)),
+      '#description' => t('This text will be displayed if a @code (@desc) error occurs.', array('@code' => $code, '@desc' => $desc[1])),
     );
   }
 
@@ -219,10 +215,11 @@ function customerror_page($code) {
         $code = customerroralt_code($code);
       }
 
-      drupal_set_title(variable_get('customerror_' . $code . '_title', _customerror_fetch_error($code)));
+      $desc = _customerror_fetch_error($code);
+      drupal_set_title(variable_get('customerror_' . $code . '_title', $desc[0]));
       $output = theme('customerror', array(
         'code' => $code,
-        'content' => variable_get('customerror_' . $code, _customerror_fetch_error($code)),
+        'content' => variable_get('customerror_' . $code, $desc[1]),
       ));
       if (module_exists('php')) {
         $output = php_eval($output);

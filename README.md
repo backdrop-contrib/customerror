@@ -58,7 +58,7 @@ FAQ
 ---
 
 Q: I want to prevent robots from indexing my custom error pages by
-   setting the robots meta tag in the HTML head to NOINDEX.
+   setting the robots meta tag in the HTML head to NOINDEX.\
 A: There is no need to. CustomError returns the correct HTTP status
    codes (403 and 404). This will prevent robots from indexing the
    error pages.
@@ -67,14 +67,14 @@ Q: I want to customize the custom error template output.\
 A: In your site's theme, duplicate your page.tpl.php to be
    page--customerror.tpl.php and then make your modifications there.
 
-Q: I want to have a different template for my 404 and 403 pages.
+Q: I want to have a different template for my 404 and 403 pages.\
 A: Duplicate your page.tpl.php page to be
    page--customerror--404.tpl.php and
    page--customerror--403.tpl.php. You do not need a
    page--customerror.tpl.php for this to work.
 
 Q: Some 403 errors (e.g. "http://example.org/includes") are served by
-   the Apache web server and not by CustomError. Isn't that a bug?
+   the Apache web server and not by CustomError. Isn't that a bug?\
 A: No. CustomError is only designed to provide a custom error page
    when the page is processed by Backdrop.  The .htaccess file that
    comes with Backdrop will catch some attempts to access forbidden
@@ -84,7 +84,7 @@ A: No. CustomError is only designed to provide a custom error page
    ErrorDocument 403 /error/403.html For more information about this,
    see: http://httpd.apache.org/docs/current/custom-error.html
 
-Q: I want to implement a custom page for another error code.
+Q: I want to implement a custom page for another error code.\
 A: Please contact [AltaGrade](https://www.altagrade.com) for customizations of
    this module as well as Backdrop consulting, installation, development, and customizations.
 

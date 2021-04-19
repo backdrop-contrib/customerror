@@ -63,7 +63,7 @@ A: There is no need to. CustomError returns the correct HTTP status
    codes (403 and 404). This will prevent robots from indexing the
    error pages.
 
-Q: I want to customize the custom error template output.
+Q: I want to customize the custom error template output.\
 A: In your site's theme, duplicate your page.tpl.php to be
    page--customerror.tpl.php and then make your modifications there.
 

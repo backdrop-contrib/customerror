@@ -76,13 +76,14 @@ A: Duplicate your page.tpl.php page to be
 Q: Some 403 errors (e.g. "http://example.org/includes") are served by
    the Apache web server and not by CustomError. Isn't that a bug?
 A: No. CustomError is only designed to provide a custom error page
-   when the page is processed by Drupal.  The .htaccess file that
-   comes with Bakcdrop will catch some attempts to access forbidden
-   directories before Drupal even see the requests.  These access
+   when the page is processed by Backdrop.  The .htaccess file that
+   comes with Backdrop will catch some attempts to access forbidden
+   directories before Backdrop even see the requests.  These access
    attempts will get the default Apache 403 error document, unless you
    use the Apache ErrorDocument directive to override this, e.g:
    ErrorDocument 403 /error/403.html For more information about this,
    see: http://httpd.apache.org/docs/current/custom-error.html
+
 Q: I want to implement a custom page for another error code.
 A: Please contact [AltaGrade](https://www.altagrade.com) for customizations of
    this module as well as Backdrop consulting, installation, development, and customizations.

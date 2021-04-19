@@ -4,7 +4,7 @@
  * Tests for the CustomError module.
  */
 
-class CustomErrorTestCase extends DrupalWebTestCase {
+class CustomErrorTestCase extends BackdropWebTestCase {
 
   /**
    * Implements getInfo().
@@ -37,14 +37,14 @@ class CustomErrorTestCase extends DrupalWebTestCase {
 
     // Access error page directly, check for response code, title
     // and description of error message.
-    $this->drupalGet('customerror/404');
+    $this->backdropGet('customerror/404');
     $this->assertResponse(404, 'Response code on 404 error page set when accessed directly.');
     $this->assertText($title, 'Title on 404 error page set when accessed directly.');
     $this->assertText($description, 'Description on 404 error page set when accessed directly.');
 
     // Access a non-existing page, check for response code, title
     // and description of error message.
-    $this->drupalGet('foo/dontexist');
+    $this->backdropGet('foo/dontexist');
     $this->assertResponse(404, 'Response code on 404 error page set when accessed at non-existent URL.');
     $this->assertText($title, 'Title on 404 error page set when accessed at non-existent URL.');
     $this->assertText($description, 'Description on 404 error page set when accessed at non-existent URL.');
@@ -64,14 +64,14 @@ class CustomErrorTestCase extends DrupalWebTestCase {
 
     // Access error page directly, check for response code, title
     // and description of error message.
-    $this->drupalGet('customerror/403');
+    $this->backdropGet('customerror/403');
     $this->assertResponse(403, 'Response code on 403 error page set when accessed at non-existent URL');
     $this->assertText($title, 'Title on 403 error page set when accessed directly');
     $this->assertText($description, 'Description on 403 error page set when accessed directly');
 
     // Access admin page as an anonymous user, check for response code, title
     // and description of error message.
-    $this->drupalGet('admin');
+    $this->backdropGet('admin');
     $this->assertResponse(403, 'Response code on 403 error page set when accessed at non-existent URL');
     $this->assertText($title, 'Title on 403 error page set when accessed at non-existent URL');
     $this->assertText($description, 'Description on 403 error page set when accessed at non-existent URL');

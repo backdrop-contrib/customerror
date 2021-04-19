@@ -1,0 +1,6 @@
+[CustomErrorTestCase]
+name = Custom Error
+description = Check that the custom error messages are displayed.
+group = Custom Error
+file = customerror.test
+

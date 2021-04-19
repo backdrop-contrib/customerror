@@ -1,6 +1,6 @@
 name = Custom Error
 description = Enables the creation of custom error pages for 404 and 403 errors, as well as redirects for 404s.
-core = 7.x
+backdrop = 1.x
+type = module
 configure = admin/config/system/customerror
 
-files[] = customerror.test

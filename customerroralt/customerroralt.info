@@ -1,6 +1,0 @@
-name = Custom error alternate for authenticated
-description = Enables the creation of an "insufficient permissions" page for authenticated users, as distinct from "please log in" for anonymous users.<br /><small>Machine name: customerroralt</small>
-core = 7.x
-configure = admin/config/system/customerror
-files[] = customerroralt.test
-dependencies[] = customerror

@@ -1,0 +1,9 @@
+{
+    "_config_name": "customerror.settings",
+    "customerror_403_title": "Access denied",
+    "customerror_403": "Access denied",
+    "customerror_404_title": "Page not found",
+    "customerror_404": "Page not found",
+    "customerror_redirect": "",
+    "customerror_theme": "0"
+}

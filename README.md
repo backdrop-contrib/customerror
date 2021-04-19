@@ -7,14 +7,14 @@ custom 404 redirect rules.
 
 Features:
 
-* Configurable page title and descriptions.
-* There are no author and date/time headers unlike normal nodes.
-* Any HTML formatted text can be be put in the page body.
-* The error pages are themeable.
-* Users who are not logged in and try to access an area that requires
+- Configurable page title and descriptions.
+- There are no author and date/time headers unlike normal nodes.
+- Any HTML formatted text can be be put in the page body.
+- The error pages are themeable.
+- Users who are not logged in and try to access an area that requires
   login will be redirected to the page they were trying to access after
   they login.
-* Allows custom redirects for 404s.
+  Allows custom redirects for 404s.
 
 Since the error pages are not real nodes, they do not have a specific content
 type, and will not show up in node listings.
@@ -43,8 +43,10 @@ It is possible to set up custom redirects for status code 404 (not found).
 For example, if you had a page called foo and a page called xyz, then you moved
 them to a page called bar, and abc respectively, then setup the redirect rules:
 
+```
   ^foo$ bar
   ^xyz$ abc
+```
 
 The first rule will redirect visitors of example.com/foo to example.com/bar. The
 second rule will redirect all requests to example.com/xyz to example.com/abc.

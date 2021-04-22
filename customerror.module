@@ -269,7 +269,9 @@ function theme_customerror(array $variables) {
  * Implements hook_preprocess_page().
  */
 function customerror_preprocess_page(&$variables) {
-  $variables['classes'][] = 'customerror';
+  if ($variables['head_title_array']['title'] == 'Page not found' || $variables['head_title_array']['title'] == 'Access denied') {
+    $variables['classes'][] = 'customerror';
+  }
 }
 
 /**

@@ -105,7 +105,7 @@ Credits
 -------
 
 - Ported to Backdrop CMS by [Alan Mels](https://github.com/alanmels).
-- Originally written for Backdrop by [Khalid Baheyeldin](https://github.com/kbahey).
+- Originally written for Drupal by [Khalid Baheyeldin](https://github.com/kbahey).
 
 License
 -------

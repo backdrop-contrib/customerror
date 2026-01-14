@@ -104,7 +104,7 @@ function customerror_admin_settings($form, &$form_state) {
     '#title' => t('Redirect list'),
     '#default_value' => $config->get('customerror_redirect'),
     '#rows' => 10,
-    '#description' => t('These are custom redirect pairs, one per line. Each pair requires a path to match (which is a regular expression) and a destination separated by a space. The keyword <em>&lt;front></em> is allowed as a destination. If you are unfamilar with regular expressions, a simple search string will work, but will match any part of the URl. For example <em>index.html &lt;front></em> will match both <em>http://example.com/index.html &amp; http://example.com/archive/index.html</em>.'),
+    '#description' => t('One redirect per line: <em>pattern destination</em>. The pattern is a regular expression matched against the requested path; the destination is where to send the visitor. The keyword <em>&lt;front></em> is allowed as a destination. Examples: <em>index.html &lt;front></em> (send any index.html to the front page), <em>old-page &lt;front></em> (any URL containing “old-page” goes home), <em>^forum/.* /forum</em> (all forum subpaths go to /forum).'),
   );
 
   $themes = system_rebuild_theme_data();

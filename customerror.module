@@ -348,27 +348,6 @@ function customerror_form_search_theme_form_alter(&$form, &$form_state, $form_id
   }
 }
 
-/**
- * Implements hook_custom_theme().
- *
- * Will return custom theme for error_page if custom has been
- * selected, 0 => default.
- *
- * @return string
- *   The machine readable name of the theme to use.
- */
-
-function customerror_custom_theme() {
-  $theme = config_get('customerror.settings', 'customerror_theme');
-  if (!$theme) {
-    return;
-  }
-  if (backdrop_valid_path(current_path())) {
-    return;
-  }
-  return $theme;
-}
-
 /*
  * Theme function for LoginToboggan's 'lt_access_denied'.
  */
@@ -413,4 +392,17 @@ function customerror_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'system_site_information_settings') {
     unset($form['error_page']);
   }
+}
+
+/**
+ * Callback to choose theme for customerror pages if configured
+ */
+function customerror_theme_callback() {
+  if (path_is_admin(current_path()) && user_access('view the administration theme')) {
+    return config_get('system.core', 'admin_theme');
+  }
+  if ($customerror_theme = config_get('customerror.settings', 'customerror_theme')) {
+    return $customerror_theme;
+  }
+  return config_get('system.core', 'theme_default');
 }
